@@ -19,11 +19,11 @@
                 app:nullable="true" />
             <argument
                 android:name="sort"
-                app:argType="String"
+                app:argType="string"
                 app:nullable="true" />
             <argument
                 android:name="filter"
-                app:argType="String"
+                app:argType="string"
                 app:nullable="true" />
         </action>
     </fragment>
