@@ -1,0 +1,29 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.GrowwAssignment" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/primaryColorLight</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryColorLight</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/secondaryColor</item>
+        <item name="android:windowBackground">@color/windowBG</item>
+        <!-- Customize your theme here. -->
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorSecondary">@color/black</item>
+    </style>
+
+    <style name="Theme.GrowwAssignment" parent="Base.Theme.GrowwAssignment" />
+
+    <style name="ButtonTextStyle2_Selected_Primary">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">@color/primaryColor</item>
+        <item name="android:background">@drawable/btn_round_selected_1</item>
+    </style>
+
+</resources>

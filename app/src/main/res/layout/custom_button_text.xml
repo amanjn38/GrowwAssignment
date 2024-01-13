@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ct_btn_text_root"
+    android:paddingHorizontal="8dp"
+    android:minWidth="36dp"
+    android:layout_height="36dp">
+
+    <TextView
+        android:id="@+id/ct_btn_text_tv_primary"
+        android:layout_width="wrap_content"
+        tools:text="1AC"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/secondaryColor"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@id/ct_btn_text_tv_secondary"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/ct_btn_text_tv_secondary"
+        android:layout_width="wrap_content"
+        tools:text="Economy"
+        android:textSize="8sp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ct_btn_text_tv_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/secondaryColor"
+        android:layout_height="wrap_content" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

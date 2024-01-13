@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <declare-styleable name="CustomButtonWithImage">
+
+        <attr name="drawableSrc" format="reference" />
+
+        <attr name="bgColor" format="reference" />
+        <attr name="selectedBgColor" format="reference" />
+
+        <attr name="drawableColor" format="color" />
+        <attr name="selectedDrawableColor" format="color" />
+
+        <attr name="isCTButtonWithImageSelected" format="boolean" />
+
+    </declare-styleable>
+
+    <declare-styleable name="CustomButtonWithText">
+
+        <attr name="CTButtonWithTextBgColor" format="reference" />
+        <attr name="CTButtonWithTextSelectedBgColor" format="reference" />
+
+        <attr name="primaryText" format="string" />
+        <attr name="secondaryText" format="string" />
+
+        <attr name="primaryTextColor" format="color" />
+        <attr name="secondaryTextColor" format="color" />
+
+        <attr name="primarySelectedTextColor" format="color" />
+        <attr name="secondarySelectedTextColor" format="color" />
+        <attr name="primaryTextSize" format="dimension" />
+
+        <attr name="isCTButtonWithTextSelected" format="boolean" />
+
+
+    </declare-styleable>
+
+    <declare-styleable name="CustomButtonWithTextSort">
+
+        <attr name="CTButtonWithTextBgColorSort" format="reference" />
+        <attr name="CTButtonWithTextSelectedBgColorSort" format="reference" />
+
+        <attr name="primaryTextSort" format="string" />
+
+        <attr name="primaryTextColorSort" format="color" />
+
+        <attr name="primarySelectedTextColorSort" format="color" />
+        <attr name="primaryTextSizeSort" format="dimension" />
+
+        <attr name="isCTButtonWithTextSelectedSort" format="boolean" />
+
+
+    </declare-styleable>
+
+
+    <declare-styleable name="CustomIncrementorButton">
+
+        <attr name="minCounter" format="integer" />
+        <attr name="maxCounter" format="integer" />
+
+    </declare-styleable>
+
+
+</resources>

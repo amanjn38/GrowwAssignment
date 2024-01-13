@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/characterFragment">
+
+    <fragment
+        android:id="@+id/characterFragment"
+        android:name="com.finance.growwassignment.ui.screens.CharacterFragment"
+        android:label="fragment_character"
+        tools:layout="@layout/fragment_character" >
+        <action
+            android:id="@+id/action_characterFragment_to_filmsFragment"
+            app:destination="@id/filmsFragment" >
+            <argument
+                android:name="result"
+                app:argType="com.finance.growwassignment.models.Result"
+                app:nullable="true" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/filmsFragment"
+        android:name="com.finance.growwassignment.ui.screens.FilmsFragment"
+        android:label="fragment_films"
+        tools:layout="@layout/fragment_films" >
+        <action
+            android:id="@+id/action_filmsFragment_to_characterFragment"
+            app:destination="@id/characterFragment" />
+    </fragment>
+</navigation>

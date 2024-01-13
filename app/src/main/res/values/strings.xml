@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">GrowwAssignment</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="color_names">
+        <item>blue</item>
+        <item>yellow</item>
+        <item>red</item>
+        <item>brown</item>
+        <item>black</item>
+        <item>orange</item>
+        <item>hazel</item>
+        <item>pink</item>
+        <item>gold</item>
+        <item>white</item>
+    </string-array>
+
+</resources>
