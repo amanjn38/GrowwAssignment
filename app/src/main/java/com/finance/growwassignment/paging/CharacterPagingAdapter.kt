@@ -9,11 +9,11 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.finance.growwassignment.R
-import com.finance.growwassignment.models.Result
+import com.finance.growwassignment.models.CharacterResult
 import com.finance.growwassignment.utilities.OnItemClickListener
 
-class CharacterPagingAdapter(private val itemClickListener: OnItemClickListener<Result>) :
-    PagingDataAdapter<Result, CharacterPagingAdapter.CharacterViewHolder>(COMPARATOR) {
+class CharacterPagingAdapter(private val itemClickListener: OnItemClickListener<CharacterResult>) :
+    PagingDataAdapter<CharacterResult, CharacterPagingAdapter.CharacterViewHolder>(COMPARATOR) {
 
     class CharacterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.nameTextView)
@@ -29,10 +29,10 @@ class CharacterPagingAdapter(private val itemClickListener: OnItemClickListener<
         val item = getItem(position)
         if (item != null) {
             holder.name.text = item.name
-            holder.eyeColor.text = "Eye Color" + item.eye_color
-            holder.gender.text = "Gender " + item.gender
-            holder.mass.text = "Mass" + item.mass
-            holder.height.text = "Height" + item.height
+            holder.eyeColor.text = "Eye Color : " + item.eye_color
+            holder.gender.text = "Gender : " + item.gender
+            holder.mass.text = "Mass : " + item.mass
+            holder.height.text = "Height : " + item.height
         }
         holder.root.setOnClickListener {
             if (item != null) {
@@ -47,12 +47,12 @@ class CharacterPagingAdapter(private val itemClickListener: OnItemClickListener<
     }
 
     companion object {
-        private val COMPARATOR = object : DiffUtil.ItemCallback<Result>() {
-            override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean {
+        private val COMPARATOR = object : DiffUtil.ItemCallback<CharacterResult>() {
+            override fun areItemsTheSame(oldItem: CharacterResult, newItem: CharacterResult): Boolean {
                 return oldItem.url == newItem.url
             }
 
-            override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean {
+            override fun areContentsTheSame(oldItem: CharacterResult, newItem: CharacterResult): Boolean {
                 return oldItem == newItem
             }
         }

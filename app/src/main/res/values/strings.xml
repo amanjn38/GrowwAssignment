@@ -1,7 +1,19 @@
 <resources>
     <string name="app_name">GrowwAssignment</string>
+    <string name="back">Back</string>
+    <string name="movies">Movies</string>
+    <string name="filter">Filter</string>
+    <string name="sort_by">Sort By</string>
+    <string name="characters">Characters</string>
+    <string name="reset">Reset</string>
+    <string name="name">Name</string>
+    <string name="height">Height</string>
+    <string name="mass">Mass</string>
+    <string name="created">Created</string>
+    <string name="edited">Edited</string>
+    <string name="apply">Apply</string>
+    <string name="eye_color">Eye Color</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string-array name="color_names">
         <item>blue</item>

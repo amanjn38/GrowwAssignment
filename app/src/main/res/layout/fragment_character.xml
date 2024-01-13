@@ -8,17 +8,6 @@
     android:elevation="4dp"
     tools:context=".ui.screens.CharacterFragment">
 
-    <!--    <GridView-->
-    <!--        android:id="@+id/characterGridView"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        android:columnWidth="150dp"-->
-    <!--        android:gravity="center"-->
-    <!--        android:horizontalSpacing="8dp"-->
-    <!--        android:numColumns="2"-->
-    <!--        android:stretchMode="columnWidth"-->
-    <!--        android:verticalSpacing="8dp" />-->
-
     <Button
         android:id="@+id/filter_button"
         android:layout_width="109dp"
@@ -29,7 +18,7 @@
         android:elevation="4dp"
         android:gravity="center"
         android:paddingEnd="8dp"
-        android:text="Filter"
+        android:text="@string/filter"
         android:textColor="@color/secondaryColor"
         android:textSize="13sp"
         app:layout_constraintEnd_toStartOf="@id/sort_button"
@@ -44,7 +33,7 @@
         android:drawableEnd="@drawable/baseline_keyboard_arrow_down_24"
         android:elevation="4dp"
         android:paddingEnd="8dp"
-        android:text="Sort By"
+        android:text="@string/sort_by"
         android:textColor="@color/secondaryColor"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="@id/filter_button"
@@ -53,16 +42,28 @@
         app:layout_constraintTop_toTopOf="@id/filter_button"
         app:layout_constraintVertical_bias="0.0" />
 
+    <TextView
+        android:id="@+id/text"
+        android:text="@string/characters"
+        android:gravity="center"
+        android:textSize="32sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sort_button"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/filter_button" />
+        app:layout_constraintTop_toBottomOf="@id/text" />
 
     <ProgressBar
         android:id="@+id/progress_bar"

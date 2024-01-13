@@ -15,7 +15,15 @@
             app:destination="@id/filmsFragment" >
             <argument
                 android:name="result"
-                app:argType="com.finance.growwassignment.models.Result"
+                app:argType="com.finance.growwassignment.models.CharacterResult"
+                app:nullable="true" />
+            <argument
+                android:name="sort"
+                app:argType="String"
+                app:nullable="true" />
+            <argument
+                android:name="filter"
+                app:argType="String"
                 app:nullable="true" />
         </action>
     </fragment>

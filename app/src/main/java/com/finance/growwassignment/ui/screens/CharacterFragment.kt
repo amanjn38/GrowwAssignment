@@ -13,14 +13,13 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.finance.growwassignment.R
 import com.finance.growwassignment.databinding.FilterViewBinding
 import com.finance.growwassignment.databinding.FragmentCharacterBinding
 import com.finance.growwassignment.databinding.SortViewBinding
-import com.finance.growwassignment.models.Result
+import com.finance.growwassignment.models.CharacterResult
 import com.finance.growwassignment.paging.CharacterPagingAdapter
 import com.finance.growwassignment.paging.LoaderAdapter
 import com.finance.growwassignment.utilities.FilterType
@@ -29,13 +28,11 @@ import com.finance.growwassignment.utilities.OnItemClickListener
 import com.finance.growwassignment.viewmodels.CharacterViewModel
 import com.finance.growwassignment.viewmodels.MovieViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class CharacterFragment : Fragment(), OnItemClickListener<Result> {
+class CharacterFragment : Fragment(), OnItemClickListener<CharacterResult> {
     private var _binding: FragmentCharacterBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CharacterViewModel by viewModels()
@@ -45,6 +42,8 @@ class CharacterFragment : Fragment(), OnItemClickListener<Result> {
     private var isLoading = false
     private var doubleBackToExitPressedOnce = false
     private var selectedFilter: FilterType? = null
+    private var sortOption: String? = null
+    private var filterOption: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +53,7 @@ class CharacterFragment : Fragment(), OnItemClickListener<Result> {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCharacterBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -76,13 +75,10 @@ class CharacterFragment : Fragment(), OnItemClickListener<Result> {
             header = LoaderAdapter(),
             footer = LoaderAdapter()
         )
-//        binding.recyclerView.setHasFixedSize(true)
-        viewModel.getCharactersSorted(null).observe(viewLifecycleOwner) { pagingData ->
+        viewModel.getCharacters().observe(viewLifecycleOwner) { pagingData ->
             adapter.submitData(lifecycle, pagingData)
         }
-
         initViews()
-
     }
 
     private fun showSortView() {
@@ -104,7 +100,6 @@ class CharacterFragment : Fragment(), OnItemClickListener<Result> {
     private fun setClickListeners() {
 
         binding.sortButton.setOnClickListener {
-            System.out.println("testingBottom2")
             showSortView()
         }
 
@@ -141,8 +136,13 @@ class CharacterFragment : Fragment(), OnItemClickListener<Result> {
     private fun initFilterPageViews() {
         filterViewBinding.btApply.setOnClickListener {
             hideFilterView()
-
             applyFilter()
+        }
+
+        filterViewBinding.btReset.setOnClickListener {
+            getCharacters()
+            clearFilters()
+            hideFilterView()
         }
         val colorNames = resources.getStringArray(R.array.color_names)
         val hairColorAdapter = ArrayAdapter(
@@ -161,22 +161,19 @@ class CharacterFragment : Fragment(), OnItemClickListener<Result> {
                     id: Long
                 ) {
                     // Handle the selected item
-                    handleFilterSelection(FilterType.HAIR_COLOR)
+                    handleFilterSelection(FilterType.EYE_COLOR)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // Handle case where nothing is selected
                 }
             }
 
         filterViewBinding.seebarHeight.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                // You can add logic here if needed
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                // No specific action needed
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
@@ -187,11 +184,9 @@ class CharacterFragment : Fragment(), OnItemClickListener<Result> {
         filterViewBinding.seebarMass.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                // You can add logic here if needed
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                // No specific action needed
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
@@ -200,36 +195,32 @@ class CharacterFragment : Fragment(), OnItemClickListener<Result> {
         })
     }
 
+    private fun clearFilters() {
+        filterViewBinding.spHairColor.setSelection(0)
+        filterViewBinding.seebarHeight.progress = 0
+        filterViewBinding.seebarMass.progress = 0
+    }
+
     private fun applyFilter() {
         when (selectedFilter) {
-            FilterType.HAIR_COLOR -> {
-                // Apply hair color filter
-                val selectedHairColor = filterViewBinding.spHairColor.selectedItem.toString()
-                viewModel.getCharactersFilterByHairColor(selectedHairColor)
-                    .observe(viewLifecycleOwner) { pagingData ->
-                        adapter.submitData(lifecycle, pagingData)
-                    }
+            FilterType.EYE_COLOR -> {
+                val selectedEyeColor = filterViewBinding.spHairColor.selectedItem.toString()
+                filterOption = "hairColor" + ", " + selectedEyeColor
+                filterbasedOnHairColor(selectedEyeColor)
 
             }
 
             FilterType.HEIGHT -> {
-                // Apply height filter
                 val selectedHeight = filterViewBinding.seebarHeight.progress.toString()
-                System.out.println("testingheight" + selectedHeight)
-                viewModel.getCharactersFilterByHeight("65", selectedHeight)
-                    .observe(viewLifecycleOwner) { pagingData ->
-                        adapter.submitData(lifecycle, pagingData)
-                    }
+                filterOption = "height" + ", " + "65" + "," + selectedHeight
+                filterByHeight(selectedHeight)
 
             }
 
             FilterType.MASS -> {
-                // Apply mass filter
                 val selectedMass = filterViewBinding.seebarMass.progress.toString()
-                viewModel.getCharactersFilterByMass("15", selectedMass)
-                    .observe(viewLifecycleOwner) { pagingData ->
-                        adapter.submitData(lifecycle, pagingData)
-                    }
+                filterOption = "mass" + ", " + "15" + "," + selectedMass
+                filterByMass(selectedMass)
 
             }
 
@@ -238,6 +229,36 @@ class CharacterFragment : Fragment(), OnItemClickListener<Result> {
                 // You can show a message or handle it based on your requirement
             }
         }
+    }
+
+    private fun filterByMass(selectedMass: String) {
+        viewModel.getCharactersFilterByMass("15", selectedMass)
+            .observe(viewLifecycleOwner) { pagingData ->
+                adapter.submitData(lifecycle, pagingData)
+                binding.recyclerView.postDelayed({
+                    binding.recyclerView.layoutManager?.scrollToPosition(0)
+                }, 200)
+            }
+    }
+
+    private fun filterByHeight(selectedHeight: String) {
+        viewModel.getCharactersFilterByHeight("65", selectedHeight)
+            .observe(viewLifecycleOwner) { pagingData ->
+                adapter.submitData(lifecycle, pagingData)
+                binding.recyclerView.postDelayed({
+                    binding.recyclerView.layoutManager?.scrollToPosition(0)
+                }, 200)
+            }
+    }
+
+    private fun filterbasedOnHairColor(selectedEyeColor: String) {
+        viewModel.getCharactersFilterByHairColor(selectedEyeColor)
+            .observe(viewLifecycleOwner) { pagingData ->
+                adapter.submitData(lifecycle, pagingData)
+                binding.recyclerView.postDelayed({
+                    binding.recyclerView.layoutManager?.scrollToPosition(0)
+                }, 200)
+            }
     }
 
     private fun handleFilterSelection(filterType: FilterType) {
@@ -257,7 +278,11 @@ class CharacterFragment : Fragment(), OnItemClickListener<Result> {
 
     private fun initSortPageViews() {
 
-
+        sortViewBinding.btReset.setOnClickListener {
+            getCharacters()
+            hideSortView()
+            sortViewBinding.sortRadioGroup.clearCheck();
+        }
         sortViewBinding.btApply.setOnClickListener {
             hideSortView()
 
@@ -270,66 +295,100 @@ class CharacterFragment : Fragment(), OnItemClickListener<Result> {
             when (checkedId) {
                 R.id.sortByName -> {
                     showLoadingIndicator()
-                    viewModel.getCharactersSortedByName()
-                        .observe(viewLifecycleOwner) { pagingData ->
-                            adapter.submitData(lifecycle, pagingData)
-//                            binding.recyclerView.postDelayed({
-//                                binding.recyclerView.layoutManager?.scrollToPosition(0)
-//                            }, 200)
-                        }
+                    sortOption = "name"
+                    sortByName()
                     hideLoadingIndicator()
                 }
 
                 R.id.sortByHeight -> {
                     showLoadingIndicator()
-                    viewModel.getCharactersSortedByHeight()
-                        .observe(viewLifecycleOwner) { pagingData ->
-                            adapter.submitData(lifecycle, pagingData)
-                            binding.recyclerView.postDelayed({
-                                binding.recyclerView.layoutManager?.scrollToPosition(0)
-                            }, 200)
-                        }
+                    sortOption = "height"
+                    sortByHeight()
                     hideLoadingIndicator()
                 }
 
                 R.id.sortByMass -> {
                     showLoadingIndicator()
-                    viewModel.getCharactersSortedByMass()
-                        .observe(viewLifecycleOwner) { pagingData ->
-                            adapter.submitData(lifecycle, pagingData)
-                            binding.recyclerView.postDelayed({
-                                binding.recyclerView.layoutManager?.scrollToPosition(0)
-                            }, 200)
-                        }
+                    sortOption = "mass"
+                    sortByMass()
                     hideLoadingIndicator()
                 }
 
                 R.id.sortByCreated -> {
                     showLoadingIndicator()
-                    viewModel.getCharactersSortedByDateCreated()
-                        .observe(viewLifecycleOwner) { pagingData ->
-                            adapter.submitData(lifecycle, pagingData)
-                            binding.recyclerView.postDelayed({
-                                binding.recyclerView.layoutManager?.scrollToPosition(0)
-                            }, 200)
-                        }
+                    sortOption = "created"
+                    sortByCreated()
                     hideLoadingIndicator()
                 }
 
                 R.id.sortByEdited -> {
                     showLoadingIndicator()
-                    viewModel.getCharactersSortedByDateEdited()
-                        .observe(viewLifecycleOwner) { pagingData ->
-                            adapter.submitData(lifecycle, pagingData)
-                            binding.recyclerView.postDelayed({
-                                binding.recyclerView.layoutManager?.scrollToPosition(0)
-                            }, 200)
-                        }
+                    sortOption = "edited"
+                    sortByEdited()
                     hideLoadingIndicator()
                 }
             }
 
             lastCheckedRadioButtonId = checkedId
+        }
+    }
+
+    private fun sortByMass() {
+        viewModel.getCharactersSortedByMass()
+            .observe(viewLifecycleOwner) { pagingData ->
+                adapter.submitData(lifecycle, pagingData)
+                binding.recyclerView.postDelayed({
+                    binding.recyclerView.layoutManager?.scrollToPosition(0)
+                }, 200)
+            }
+    }
+
+    private fun sortByEdited() {
+        viewModel.getCharactersSortedByDateEdited()
+            .observe(viewLifecycleOwner) { pagingData ->
+                adapter.submitData(lifecycle, pagingData)
+                binding.recyclerView.postDelayed({
+                    binding.recyclerView.layoutManager?.scrollToPosition(0)
+                }, 200)
+            }
+    }
+
+    private fun sortByCreated() {
+        viewModel.getCharactersSortedByDateCreated()
+            .observe(viewLifecycleOwner) { pagingData ->
+                adapter.submitData(lifecycle, pagingData)
+                binding.recyclerView.postDelayed({
+                    binding.recyclerView.layoutManager?.scrollToPosition(0)
+                }, 200)
+            }
+    }
+
+    private fun sortByHeight() {
+        viewModel.getCharactersSortedByHeight()
+            .observe(viewLifecycleOwner) { pagingData ->
+                adapter.submitData(lifecycle, pagingData)
+                binding.recyclerView.postDelayed({
+                    binding.recyclerView.layoutManager?.scrollToPosition(0)
+                }, 200)
+            }
+    }
+
+    private fun sortByName() {
+        viewModel.getCharactersSortedByName()
+            .observe(viewLifecycleOwner) { pagingData ->
+                adapter.submitData(lifecycle, pagingData)
+                binding.recyclerView.postDelayed({
+                    binding.recyclerView.layoutManager?.scrollToPosition(0)
+                }, 200)
+            }
+    }
+
+    private fun getCharacters() {
+        viewModel.getCharacters().observe(viewLifecycleOwner) { pagingData ->
+            adapter.submitData(lifecycle, pagingData)
+            binding.recyclerView.postDelayed({
+                binding.recyclerView.layoutManager?.scrollToPosition(0)
+            }, 200)
         }
     }
 
@@ -343,16 +402,12 @@ class CharacterFragment : Fragment(), OnItemClickListener<Result> {
     private lateinit var sortViewBinding: SortViewBinding
 
     private lateinit var filterViewBinding: FilterViewBinding
-    private fun shouldDisableFilterSortButton(shouldDisable: Boolean) {
-
-        binding.filterButton.isEnabled = !shouldDisable
-        binding.sortButton.isEnabled = !shouldDisable
-    }
-
-    override fun onItemClick(data: Result) {
+    override fun onItemClick(data: CharacterResult) {
         val action =
             CharacterFragmentDirections.actionCharacterFragmentToFilmsFragment(
-                result = data
+                result = data,
+                sortOption,
+                filterOption
             )
         findNavController().navigate(action)
     }
@@ -385,7 +440,7 @@ class CharacterFragment : Fragment(), OnItemClickListener<Result> {
         Toast.makeText(requireContext(), "Please click BACK again to exit", Toast.LENGTH_SHORT)
             .show()
 
-        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+        Handler(Looper.getMainLooper()).postDelayed({
             doubleBackToExitPressedOnce = false
         }, 2000)
     }

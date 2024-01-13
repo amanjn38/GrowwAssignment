@@ -8,7 +8,7 @@ import com.finance.growwassignment.utilities.DateTypeConverter
 import com.finance.growwassignment.utilities.StringListConverter
 
 @Entity(tableName = "Characters")
-data class Result(
+data class CharacterResult(
     @ColumnInfo(name = "birth_year")
     val birth_year: String,
 

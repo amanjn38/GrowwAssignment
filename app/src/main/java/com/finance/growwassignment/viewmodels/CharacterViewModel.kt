@@ -10,22 +10,23 @@ import javax.inject.Inject
 @HiltViewModel
 class CharacterViewModel @Inject constructor(val repository: CharacterRepository) :
     ViewModel() {
-    fun getCharactersSorted(sort: String? = null) =
-        repository.getCharacters(sort).cachedIn(viewModelScope)
 
-    fun getCharactersSortedByName(sort: String? = null) =
+    fun getCharacters() =
+        repository.getCharacters().cachedIn(viewModelScope)
+
+    fun getCharactersSortedByName() =
         repository.getCharactersSortedByName().cachedIn(viewModelScope)
 
-    fun getCharactersSortedByHeight(sort: String? = null) =
+    fun getCharactersSortedByHeight() =
         repository.getCharactersSortedByHeight().cachedIn(viewModelScope)
 
-    fun getCharactersSortedByMass(sort: String? = null) =
+    fun getCharactersSortedByMass() =
         repository.getCharactersSortedByMass().cachedIn(viewModelScope)
 
-    fun getCharactersSortedByDateCreated(sort: String? = null) =
+    fun getCharactersSortedByDateCreated() =
         repository.getCharactersSortedByCreated().cachedIn(viewModelScope)
 
-    fun getCharactersSortedByDateEdited(sort: String? = null) =
+    fun getCharactersSortedByDateEdited() =
         repository.getCharactersSortedByEdited().cachedIn(viewModelScope)
 
     fun getCharactersFilterByHairColor(color: String) =

@@ -1,7 +1,7 @@
 package com.finance.growwassignment.utilities
 
 enum class FilterType {
-    HAIR_COLOR,
+    EYE_COLOR,
     HEIGHT,
     MASS
 }
